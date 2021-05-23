@@ -26,7 +26,7 @@ namespace Signaler.Services
     {
         public static void NoUserExists(SignalerDbContext dbContext, string username)
         {
-            if (dbContext.User.Where(u => u.Username.Equals(username)) != null)
+            if (dbContext.User.Any(u => u.Username.Equals(username)))
             {
                 throw new UserExistsException(username);
             }

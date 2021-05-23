@@ -71,6 +71,7 @@ namespace Signaler.Controllers
         }
 
         [HttpGet]
+        [Route("Home/Register")]
         public IActionResult RegisterGet()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
@@ -82,14 +83,26 @@ namespace Signaler.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterPost()
+        [Route("Home/Register")]
+        public IActionResult RegisterPost(string username, string password)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 return Redirect("/Chats");
             }
 
-            return View("Register");
+            try
+            {
+                _userService.RegisterUser(username, password);
+
+            }catch(UserExistsException _)
+            {
+                Console.WriteLine($"{username} already exists");
+                ViewData["ErrorMessage"] = $"{username} already exists";
+                return View("Register");
+            }
+
+            return View("Index");
         }
 
         [HttpGet]

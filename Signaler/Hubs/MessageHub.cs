@@ -60,17 +60,20 @@ public class ChatHub : Hub
         messageObj.User = _dbContext.User.Where(u => u.Username == Context.User.Identity.Name).First();
 
         _dbContext.Add(messageObj);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();    
         await Clients.GroupExcept(groupId.ToString(), Context.ConnectionId).SendAsync("ReceiveMessage", groupId, message, Context.User.Identity.Name);
     }
 
     public Task CreateGroup(string groupName, List<string> usernames)
     {
         var group = _messageService.CreateGroup(Context.User.Identity.Name, groupName, usernames);
+
+        
         usernames.ForEach(u =>
         {
             _connectionsService.GetConnectionIds(u).ForEach(async cid => await Groups.AddToGroupAsync(cid, group.GroupId.ToString()));
         });
+        _connectionsService.GetConnectionIds(Context.User.Identity.Name).ForEach(async cid => await Groups.AddToGroupAsync(cid, group.GroupId.ToString()));
 
         return Task.CompletedTask;
     }
@@ -79,6 +82,8 @@ public class ChatHub : Hub
     {
         var group = _messageService.CreateChat(Context.User.Identity.Name, username);
         _connectionsService.GetConnectionIds(username).ForEach(async cid =>  await Groups.AddToGroupAsync(cid, group.GroupId.ToString()));
+        _connectionsService.GetConnectionIds(Context.User.Identity.Name).ForEach(async cid => await Groups.AddToGroupAsync(cid, group.GroupId.ToString()));
+
         return Task.CompletedTask;
     }
 }

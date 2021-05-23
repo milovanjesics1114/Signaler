@@ -23,7 +23,7 @@ namespace Signaler.Services
 
         public void Add(string username, string connectionId)
         {
-            var connections = userConnectionsMap.AddOrUpdate(username, new HashSet<string>(), (key, oldValue) =>
+            var connections = userConnectionsMap.AddOrUpdate(username, new HashSet<string>(new string[] { connectionId }), (key, oldValue) =>
             { 
                 oldValue.Add(connectionId);
                 return oldValue;
