@@ -18,7 +18,8 @@ CREATE TABLE [dbo].[User]
 GO
 
 INSERT INTO [dbo].[User]
-VALUES ('AndrijaLFC', '123'),
+VALUES ('Mama', '123'),
+	   ('Sara', '123),'
        ('Jesa', '123');
 GO
 
