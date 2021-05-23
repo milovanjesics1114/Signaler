@@ -19,7 +19,7 @@ GO
 
 INSERT INTO [dbo].[User]
 VALUES ('Mama', '123'),
-	   ('Sara', '123),'
+	   ('Sara', '123'),
        ('Jesa', '123');
 GO
 
