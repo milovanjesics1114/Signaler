@@ -1,0 +1,63 @@
+@model Signaler.Controllers.ChatsIndexViewModel
+
+<div class="row">
+    <div class="col-3">
+        <p><b>Chats:</b></p>
+        <div id="groups">
+            @foreach (var group in Model.Groups)
+            {
+                var name = "";
+                if (group.Type.Equals("Group"))
+                {
+                    name = group.GroupName;
+                }
+                else
+                {
+                    name = group.Users.ElementAt(0).Username + "," + @group.Users.ElementAt(1).Username;
+                }
+
+                <a href="#" class="list-group-item list-group-item-action" id="@group.GroupId" onclick="getChatMessages(@group.GroupId)">
+                    @name
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="col-9">
+        <div class="row pre-scrollable" style="height: 500px;background-color:gray" id="message-box">
+
+        </div>
+        <div>
+            <form class="forminputchat">
+                <input type="text" class="form-control" id="msg" />
+            </form>
+        </div>
+        <div class="sendbutton">
+            <button class="btn btn-primary" onclick="sendMessage(groupId, document.getElementById('msg').value)">Send</button>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col">
+        <form>
+            <label for="user">User to chat with</label>
+            <input type="text" id="user" />
+        </form>
+    </div>
+    <div class="col">
+            <button type="button" class="btn btn-secondary" onclick="createChat(document.getElementById('user').value)">Create Chat</button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col">
+        <form>
+            <label for="users">Users in Group Chat</label>
+            <input type="text" id="users" />
+            <label for="group-name">Group Name</label>
+            <input type="text" id="group-name" />
+            <button type="button" class="=btn btn-secondary" onclick="createGroup(document.getElementById('group-name').value, document.getElementById('users').value.split(','))">Create Group Chat</button>
+        </form>
+    </div>
+</div>
